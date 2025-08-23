@@ -1,25 +1,31 @@
 import streamlit as st
+import pandas as pd
+import os
+
+from predict import train_model,predict_price
+
+st.title("Predict Medical Insurance Cost")
+
 user=st.text_input("Name")
 st.write(f"Hello, {user}!!")
-x=st.text_input("Age")
-chosen = st.radio(
-        'Sex',
-        ("Male", "Female"))
-slider = st.slider(
-    'Select a range of BMI',
-    0.0, 100.0, (0.0, 100.0)
-)
-y=st.text_input("Number of Children")
-choose = st.radio(
-        'Smoker',
-        ("Yes", "No"))
-option = st.selectbox(
-    'Regions',
-     ('southwest','southeast', 'northwest', 'northeast'))
+age = st.number_input("Age", min_value=0, max_value=120, step=1, value=25)
+bmi = st.number_input("BMI", min_value=0.0, max_value=100.0, step=0.1, value=25.0)
+children = st.number_input("Number of Children", min_value=0, max_value=10, step=1, value=0)
+sex = st.radio("Sex", ("male", "female"))
+smoker = st.radio("Smoker", ("yes", "no"))
+region = st.selectbox("Regions", ('southwest','southeast','northwest','northeast'))
 
-st.write(f"User age is : {x}")
-st.write(f"User is : {chosen}")
-st.write(f"User BMI is : {slider}")
-st.write(f"User has how many Children : {y}")
-st.write(f"User smokes : {choose}")
-st.write(f"User selected : {option}")
+user_input = {
+        "age": age,
+        "sex": sex,
+        "bmi": bmi,
+        "children": children,
+        "smoker": smoker,
+        "region": region
+      }
+if st.button("Predict Charges"):
+    #score = train_model()
+    #st.success(f"Model Score: {score}")
+    price = predict_price(user_input)
+    st.success(f"{user} your Predicted Insurance Cost: ₹{price}")
+
