@@ -27,17 +27,20 @@ def train_model():
     score = model.score(X_test, y_test)
     joblib.dump((model,encoder,scaler),'sklearn_price_model.pkl')
     return score
-
+    
 def predict_price(data_dict):
     model, encoder, scaler = joblib.load('sklearn_price_model.pkl')
-
-    cat_features = [[data_dict['sex'],data_dict['region'],data_dict['smoker']]]
+    cat_features = pd.DataFrame([{
+        'sex': data_dict['sex'],
+        'region': data_dict['region'],
+        'smoker': data_dict['smoker']
+    }])
     try:
-        num_features = [[
-        float(data_dict['age']),
-        float(data_dict['bmi']),
-        float(data_dict['children'])
-    ]]
+        num_features = pd.DataFrame([{
+            'age': float(data_dict['age']),
+            'bmi': float(data_dict['bmi']),
+            'children': float(data_dict['children'])
+    }])
     except ValueError:
         raise ValueError("Please provide valid numeric values for age, BMI, and children.")
     encoded = encoder.transform(cat_features)
