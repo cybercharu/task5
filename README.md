@@ -4,7 +4,7 @@
 -user friendly 
 ## To Download dataset refer this : https://www.kaggle.com/datasets/mirichoi0218/insurance
 #### To install dependency:
-pip install -r Requirements.txt
+pip install -r requirements.txt
 #### Technology or language used
 -Python
 #### How to run this project: 
