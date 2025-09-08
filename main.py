@@ -1,9 +1,6 @@
 import streamlit as st
-import pandas as pd
-import os
-import seaborn as sns
-import numpy as np 
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 from predict import train_model,predict_price
 
@@ -27,27 +24,19 @@ user_input = {
         "region": region
       }
 if st.button("Predict Charges"):
-    #score = train_model()
-    #st.success(f"Model Score: {score}")
     price = predict_price(user_input)
     st.success(f"{user} your Predicted Insurance Cost: ₹{price}")
 
-st.subheader("Predicted Insurance Cost")
+if st.button("Show Model Performance"):
+    score, y_test, y_pred = train_model()
+    st.write(f"Model R² Score: {score:.2f}")
+    fig, ax = plt.subplots()
+    ax.plot(y_test, label="Actual", color="green", marker="o")
+    ax.plot(y_pred, label="Predicted", color="orange", marker="x")
+    ax.set_xlabel("Sample Index")
+    ax.set_ylabel("Charges")
+    ax.set_title("Actual vs Predicted")
+    ax.legend()
+    st.pyplot(fig)
 
-price = predict_price(user_input)
-
-df_price = pd.DataFrame({
-    "Category": ["Predicted Price"],
-    "Value": [price]
-})
-fig, ax = plt.subplots()
-sns.barplot(data=df_price, x="Category", y="Value", ax=ax, color="green")
-for patch in ax.patches:
-    current_width = patch.get_width()
-    patch.set_width(current_width * 0.3)  
-    patch.set_x(patch.get_x() + current_width * 0.35)  
-ax.set_ylabel("Insurance Charges (₹)")
-ax.set_title("Predicted Insurance Cost")
-st.pyplot(fig)
-
-
+    

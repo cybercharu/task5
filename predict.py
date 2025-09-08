@@ -26,7 +26,8 @@ def train_model():
     model.fit(X_train,y_train)
     score = model.score(X_test, y_test)
     joblib.dump((model,encoder,scaler),'sklearn_price_model.pkl')
-    return score
+    y_pred = model.predict(X_test)
+    return score, y_test, y_pred
     
 def predict_price(data_dict):
     model, encoder, scaler = joblib.load('sklearn_price_model.pkl')
